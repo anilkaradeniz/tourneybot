@@ -60,18 +60,13 @@ app.post("/interactions", async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
     var commandName;
-    var senderId;
+    var extraData;
     {
       let ind = componentId.lastIndexOf('_');
       commandName = componentId.slice(0, ind+1);
-      senderId = componentId.slice(ind+1);
+      extraData = componentId.slice(ind+1);
     }
     
-    
-    if (commandName === "select_choice_") {
-      // get the associated game ID
-      
-    }
     
     //console.log(commandName);
     //console.log(COMP_COMMAND[commandName]);
@@ -84,10 +79,10 @@ app.post("/interactions", async function (req, res) {
     try {
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
-      const newMessage = COMP_COMMAND[commandName](req, senderId);
+      const newMessage = COMP_COMMAND[commandName](req, extraData);
       
       await res.send(newMessage[0]);
-      await DiscordRequest(endpoint, newMessage[1]);
+      //await DiscordRequest(endpoint, newMessage[1]);
     } catch (err) {
       console.error("Error sending message:", err);
     }

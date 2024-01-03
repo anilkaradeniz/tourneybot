@@ -1,7 +1,6 @@
-
 /*  
 [
-  {
+  Tournament {
     name,
     teams[ players[] ],
     players[],
@@ -9,7 +8,7 @@
 ]
 
  */
-import { WriteJson, ReadJson, AppendJsonList } from "./utils.js";
+import { WriteJson, ReadJson, AppendJsonDict } from "./utils.js";
 
 export class Player{
   constructor(name, id){
@@ -40,34 +39,36 @@ export const toursList = initializeTournamentList(tourJsonPath);
 function initializeTournamentList(jsonPath){
   try{
     ReadJson(jsonPath);
-  }catch{
-    WriteJson(jsonPath, []);
+  }catch(err){
+    console.log(err);
+    WriteJson(jsonPath, {});
   }
 
   const obj = ReadJson(jsonPath);
-  for (let i = 0; i < obj.length; i++){
-    obj[i] = Object.assign(new Tournament, obj[i]);
-    for (let j = 0; j < obj[i].teams.length; j++){
-      obj[i].teams[j] = Object.assign(new Team, obj[i].teams[j]);
-      for (let k = 0; k < obj[i].teams[j].players.length; k++){
-        obj[i].teams[j].players[k] = Object.assign(new Player, obj[i].teams[j].players[k]);
+  for (const [tourName, tourObj] of Object.entries(obj)) {
+    obj[tourName] = Object.assign(new Tournament, tourObj);
+    for (let j = 0; j < obj[tourName].teams.length; j++){
+      obj[tourName].teams[j] = Object.assign(new Team, obj[tourName].teams[j]);
+      for (let k = 0; k < obj[tourName].teams[j].players.length; k++){
+        obj[tourName].teams[j].players[k] = Object.assign(new Player, obj[tourName].teams[j].players[k]);
       }
     }
-    for (let j = 0; j < obj[i].players.length; j++){
-      obj[i].players[j] = Object.assign(new Player, obj[i].players[j]);
+    for (let j = 0; j < obj[tourName].players.length; j++){
+      obj[tourName].players[j] = Object.assign(new Player, obj[tourName].players[j]);
     }
   }
-  console.log("tourslist", obj);
+  //console.log("tourslist", obj);
   return obj;
 }
 
 function getTournamentNames(){
-  return toursList.map(({name})=>name);
+  return Object.keys(toursList); // for dict
+  return toursList.map(({name})=>name); // for list
 }
 export function createTournamentOptions(){
   const names = getTournamentNames();
   const list = [];
-  for (var tr of toursList){
+  for (const [tourName, tr] of Object.entries(toursList)){
     list.push({
       label: tr.name,
       value: tr.name,
@@ -75,14 +76,38 @@ export function createTournamentOptions(){
     });
   }
   console.log("choices:", list);
-  return list //toursList.map(({name})=>name)
+  return list
 }
 
 export function addTournament(name, desc){
   let newtr = new Tournament(name, desc);
-  toursList.push(newtr);
-  AppendJsonList(tourJsonPath, newtr);
+  toursList[name] = newtr;
+  WriteJson(tourJsonPath, toursList);
 }
 
-addTournament("patates");
+
+
+export function listTeams(teamsList){
+  var str = "";
+  for (const team of teamsList){
+    str = str.concat(`${team.name}: `)
+    for (const player of team.players){
+      str = str.concat(`${player.name}, `)
+    }
+    str = str.slice(0, -2);
+    str = str.concat('\n');
+  }
+  if (str === "") return "none";
+  return str;
+}
+export function listPlayers(playersList){
+  var str = "";
+  for (const player of playersList){
+    str = str.concat(`-${player.name}\n`)
+  }
+  if (str === "") return "none";
+  return str;
+}
+
+//addTournament("patates");
 console.log("tours:", toursList);
