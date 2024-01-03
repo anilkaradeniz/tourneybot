@@ -9,7 +9,21 @@
 ]
 
  */
-export const toursList = [];
+import { WriteJson, ReadJson, AppendJsonList } from "./utils.js";
+
+export class Player{
+  constructor(name, id){
+    this.name = name;
+    this.id = id; //snowflake
+  }
+}
+
+export class Team{
+  constructor(name){
+    this.name = name;
+    this.players = [];
+  }
+}
 
 export class Tournament{
   constructor(name, desc = ""){
@@ -20,11 +34,31 @@ export class Tournament{
   }
 }
 
-export class Team{
-  constructor(name){
-    this.name = name;
-    this.players = [];
+const tourJsonPath = './tournaments.json';
+export const toursList = initializeTournamentList(tourJsonPath);
+
+function initializeTournamentList(jsonPath){
+  try{
+    ReadJson(jsonPath);
+  }catch{
+    WriteJson(jsonPath, []);
   }
+
+  const obj = ReadJson(jsonPath);
+  for (let i = 0; i < obj.length; i++){
+    obj[i] = Object.assign(new Tournament, obj[i]);
+    for (let j = 0; j < obj[i].teams.length; j++){
+      obj[i].teams[j] = Object.assign(new Team, obj[i].teams[j]);
+      for (let k = 0; k < obj[i].teams[j].players.length; k++){
+        obj[i].teams[j].players[k] = Object.assign(new Player, obj[i].teams[j].players[k]);
+      }
+    }
+    for (let j = 0; j < obj[i].players.length; j++){
+      obj[i].players[j] = Object.assign(new Player, obj[i].players[j]);
+    }
+  }
+  console.log("tourslist", obj);
+  return obj;
 }
 
 function getTournamentNames(){
@@ -45,7 +79,9 @@ export function createTournamentOptions(){
 }
 
 export function addTournament(name, desc){
-  toursList.push(new Tournament(name, desc));
+  let newtr = new Tournament(name, desc);
+  toursList.push(newtr);
+  AppendJsonList(tourJsonPath, newtr);
 }
 
 addTournament("patates");
