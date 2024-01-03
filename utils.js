@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fetch from 'node-fetch';
 import { verifyKey } from 'discord-interactions';
+import * as fs from 'fs';
 
 export function VerifyDiscordRequest(clientKey) {
   return function (req, res, buf, encoding) {
@@ -60,3 +61,30 @@ export function getRandomEmoji() {
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export function WriteJson(path, inpData){
+  let strjson = JSON.stringify(inpData);
+  fs.writeFileSync(path, strjson, 'utf8');
+  console.log(fs.readFileSync(path, "utf8"));
+}
+
+export function AppendJsonList(path, inpData){
+  let filejson = ReadJson(path),
+      newjson = filejson.concat(inpData);
+  newjson = JSON.stringify(newjson);
+  fs.writeFileSync(path, newjson, 'utf8');
+  console.log(fs.readFileSync(path, "utf8"));
+}
+
+export function AppendJsonDict(path, inpData){
+  let filejson = ReadJson(path),
+      newjson = Object.assign({}, filejson, inpData);
+  newjson = JSON.stringify(newjson);
+  fs.writeFileSync(path, newjson, 'utf8');
+  console.log(fs.readFileSync(path, "utf8"));
+}
+
+export function ReadJson(path){
+  return JSON.parse(fs.readFileSync(path, 'utf8'));
+}
+

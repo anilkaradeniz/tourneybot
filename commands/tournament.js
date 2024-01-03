@@ -52,7 +52,7 @@ export function execute(req){
     console.log("add:", data.options[1]);
     const tournamentName = data.options[0].options[0].value;
     let tournamentDesc = "";
-    if (data.options[0].options[1].value)
+    if (data.options[0].options[1])
       tournamentDesc = data.options[0].options[1].value;
     tr.addTournament(tournamentName, tournamentDesc);
     
@@ -66,7 +66,16 @@ export function execute(req){
   } else
   if (commandName === "edit"){
     console.log("edit:", data.options);
-    
+    if (tr.toursList.length == 0){
+      return {
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: "Currently there are no tournaments.",
+        // Indicates it'll be an ephemeral message
+        flags: InteractionResponseFlags.EPHEMERAL,
+      },
+    };
+    }
     return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
