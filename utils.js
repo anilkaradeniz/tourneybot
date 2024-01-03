@@ -83,7 +83,6 @@ export function AppendJsonDict(path, inpData){
   fs.writeFileSync(path, newjson, 'utf8');
   console.log(fs.readFileSync(path, "utf8"));
 }
-
 export function ReadJson(path){
   return JSON.parse(fs.readFileSync(path, 'utf8'));
 }
