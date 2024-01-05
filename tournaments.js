@@ -94,7 +94,7 @@ export function listTeams(teamsList){
     for (const player of team.players){
       str = str.concat(`${player.name}, `)
     }
-    str = str.slice(0, -2);
+    str = str.slice(0, -2); // remove trailing string ", "
     str = str.concat('\n');
   }
   if (str === "") return "none";
@@ -103,7 +103,7 @@ export function listTeams(teamsList){
 export function listPlayers(playersList){
   var str = "";
   for (const player of playersList){
-    str = str.concat(`-${player.name}\n`)
+    str = str.concat(`-<@${player.id}>\n`)
   }
   if (str === "") return "none";
   return str;

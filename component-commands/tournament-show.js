@@ -9,7 +9,7 @@ import {
 import * as tr from '../tournaments.js';
 
 //SET THIS
-export const name = "tournament_editor_";
+export const name = "tournament_show_";
 
 // returns: [new message body, do what on last message]
 export function execute(req, senderId){
@@ -26,53 +26,25 @@ export function execute(req, senderId){
       "content": `Tournament info of \`${tournamentName}\``,
       "tts": false,
       "embeds": [
-        {
-          "type": "rich",
-          "title": `${tournamentName}`,
-          "description": `Tournament description: \`${tournament.desc}\``,
-          "color": 0x00FFFF,
-          "fields": [
-            {
-              "name": `Teams:`,
-              "value": `\`${tr.listTeams(tournament.teams)}\``,
-            },
-            {
-              "name": `Players signed up:`,
-              "value": `\`${tr.listPlayers(tournament.players)}\``,
-            }
-          ]
-        }
-      ],
-      "components": [
-        {
-          "type": 1,
-          "components": [
-            {
-              "style": 1,
-              "label": `Edit Name`,
-              "custom_id": `tour_edit_name_`,
-              "disabled": false,
-              "type": 2
-            },
-            {
-              "style": 1,
-              "label": `Edit Teams`,
-              "custom_id": `tour_edit_teams_`,
-              "disabled": false,
-              "type": 2
-            },
-            {
-              "style": 1,
-              "label": `Edit Players`,
-              "custom_id": `tour_edit_players_`,
-              "disabled": false,
-              "type": 2
-            }
-          ]
-        },
-      ],
-    }
-  },
+      {
+        "type": "rich",
+        "title": `${tournamentName}`,
+        "description": `Tournament description: \`${tournament.desc}\``,
+        "color": 0x00FFFF,
+        "fields": [
+          {
+            "name": `Teams:`,
+            "value": `\`${tr.listTeams(tournament.teams)}\``,
+          },
+          {
+            "name": `Players signed up:`,
+            "value": `\`${tr.listPlayers(tournament.players)}\``,
+          }
+        ]
+      }
+    ]
+  }
+},
   { method: 'DELETE'} ];
 }
 

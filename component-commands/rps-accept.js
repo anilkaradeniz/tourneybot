@@ -5,7 +5,6 @@ import {
   MessageComponentTypes,
   ButtonStyleTypes,
 } from "discord-interactions";
-import { DiscordRequest } from "../utils.js";
 
 import { getShuffledOptions } from "../game.js";
 

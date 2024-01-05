@@ -36,6 +36,11 @@ export const COMMAND_INFO = {
       name: "edit",
       description: 'Edit a tournament.',
       type: 1,
+    },
+    {
+      name: "show",
+      description: 'Show the information of a tournament.',
+      type: 1,
     }
   ],
   type: 1,
@@ -68,13 +73,13 @@ export function execute(req){
     console.log("edit:", data.options);
     if (tr.toursList.length == 0){
       return {
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: "Currently there are no tournaments.",
-        // Indicates it'll be an ephemeral message
-        flags: InteractionResponseFlags.EPHEMERAL,
-      },
-    };
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: "Currently there are no tournaments.",
+          // Indicates it'll be an ephemeral message
+          flags: InteractionResponseFlags.EPHEMERAL,
+        },
+      };
     }
     return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -90,6 +95,40 @@ export function execute(req){
                 type: MessageComponentTypes.STRING_SELECT,
                 // Append game ID
                 custom_id: `tournament_editor_`,
+                options: tr.createTournamentOptions(),
+              },
+            ],
+          },
+        ],
+      },
+    };
+  } else
+  if (commandName === "show"){
+    console.log("show:", data.options);
+    if (tr.toursList.length == 0){
+      return {
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: "Currently there are no tournaments.",
+          // Indicates it'll be an ephemeral message
+          flags: InteractionResponseFlags.EPHEMERAL,
+        },
+      };
+    }
+    return {
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: "Please select a tournament.",
+        // Indicates it'll be an ephemeral message
+        flags: InteractionResponseFlags.EPHEMERAL,
+        components: [
+          {
+            type: MessageComponentTypes.ACTION_ROW,
+            components: [
+              {
+                type: MessageComponentTypes.STRING_SELECT,
+                // Append game ID
+                custom_id: `tournament_show_`,
                 options: tr.createTournamentOptions(),
               },
             ],

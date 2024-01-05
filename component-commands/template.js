@@ -5,7 +5,6 @@ import {
   MessageComponentTypes,
   ButtonStyleTypes,
 } from "discord-interactions";
-import { DiscordRequest } from "../utils.js";
 
 //SET THIS
 export const name = "templatecommand_";

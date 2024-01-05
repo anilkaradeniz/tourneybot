@@ -5,7 +5,7 @@ import {
   MessageComponentTypes,
   ButtonStyleTypes,
 } from "discord-interactions";
-import { DiscordRequest, getRandomEmoji } from "../utils.js";
+import { getRandomEmoji } from "../utils.js";
 
 import { activeGames } from "../commands/rps.js";
 import { getResult } from "../game.js";
